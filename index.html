@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>校園生態紀錄表單</title>
+  <style>
+    body { font-family: sans-serif; padding: 20px; max-width: 400px; margin: 0 auto; }
+    div { margin-bottom: 10px; }
+    label { display: block; margin-bottom: 5px; }
+    input { width: 100%; padding: 8px; box-sizing: border-box; }
+    button { width: 100%; padding: 10px; background-color: #4CAF50; color: white; border: none; cursor: pointer; }
+    button:hover { background-color: #45a049; }
+  </style>
+</head>
+<body>
+
+  <h2>新增生態紀錄</h2>
+  
+  <form id="recordForm">
+    <div><label>日期時間：</label><input type="text" id="datetime" value="2026-09-21 10:30" required></div>
+    <div><label>校園地點：</label><input type="text" id="location" value="淡江大學 圖書館前" required></div>
+    <div><label>GPS：</label><input type="text" id="gps" value="25.1752, 121.4445" required></div>
+    <div><label>物種：</label><input type="text" id="species" value="黑冠麻鷺" required></div>
+    <div><label>數量與單位：</label><input type="text" id="quantity" value="1隻" required></div>
+    <div><label>備註：</label><input type="text" id="notes" value="正在草地上覓食"></div>
+    <button type="submit">送出紀錄</button>
+  </form>
+
+  <script>
+    document.getElementById("recordForm").addEventListener("submit", function(event) {
+      event.preventDefault(); 
+      
+      // 這是你剛剛截圖裡的 GAS API 網址
+      const apiUrl = "https://script.google.com/macros/s/AKfycbyzI3a_DPc15cZAiFxCSXr03THrdwalwWgkk2DvJ1eOQGwKIfWOdzwnG4Fgc_5KfCs6/exec";
+
+      const postData = {
+        datetime: document.getElementById("datetime").value,
+        location: document.getElementById("location").value,
+        gps: document.getElementById("gps").value,
+        species: document.getElementById("species").value,
+        quantity: document.getElementById("quantity").value,
+        notes: document.getElementById("notes").value
+      };
+
+      fetch(apiUrl, {
+        method: "POST",
+        headers: {
+          "Content-Type": "text/plain;charset=utf-8",
+        },
+        body: JSON.stringify(postData) 
+      })
+      .then(response => response.json())
+      .then(data => {
+        console.log("成功:", data);
+        alert("紀錄成功！");
+      })
+      .catch((error) => {
+        console.error("錯誤:", error);
+      });
+    });
+  </script>
+
+</body>
+</html>
